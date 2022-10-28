@@ -88,7 +88,7 @@ function chunk_build(_x, _y) constructor {
 	
 	// Billboard model
 	vb_bb			= undefined;
-	vb_bb_load	= undefined;
+	vb_bb_load		= undefined;
 	
 	// Transparent model - water, glass
 	mesh_alpha		= undefined
@@ -933,10 +933,10 @@ function chunk_build(_x, _y) constructor {
 global.world_chunks = {};
 update_queue	= ds_queue_create()
 
-var _global_radius = 8
-gen_radius		= _global_radius*GRID;
-mesh_radius		= _global_radius*GRID;
-render_radius	= _global_radius*GRID;
+
+gen_radius		= 16*GRID;	// chunk data
+mesh_radius		= 8*GRID;	// chunk model
+render_radius	= 4*GRID;	// chunk submit
 
 px = 0.0;
 py = 0.0;

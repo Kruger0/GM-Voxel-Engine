@@ -13,6 +13,8 @@ my = 0
 mx_prev = 0
 my_prev = 0
 selected_block = BLOCK_ID.SNOW
+vel = new vec3(0);
+
 
 camera_movement = function() {
 
@@ -59,35 +61,38 @@ camera_movement = function() {
 	}
 
 }
-
+	
 player_movement = function() {
-	if (keyboard_check(ord("W"))) {
-		x += dcos(look_dir)*spd;
-		y -= dsin(look_dir)*spd;
-	}
 
-	if (keyboard_check(ord("S"))) {
-		x -= dcos(look_dir)*spd;
-		y += dsin(look_dir)*spd;
-	}
+	var _acel = 0.1;
+	var _xmov = keyboard_check(ord("W")) - keyboard_check(ord("S"))
+	var _ymov = keyboard_check(ord("A")) - keyboard_check(ord("D"))
+	var _zmov = keyboard_check(vk_space) - keyboard_check(vk_shift)
+	
+	vel.x = lerp(vel.x, (dsin(look_dir) * _ymov + dcos(look_dir) * _xmov) * spd, _acel);
+	vel.y = lerp(vel.y, (dcos(look_dir) * _ymov - dsin(look_dir) * _xmov) * spd, _acel);
+	vel.z = lerp(vel.z, _zmov * spd, _acel)
+	
+	//var X,Y,Z;
+	//X = floor(x);
+	//Y = floor(y);
+	//Z = floor(z);
 
-	if (keyboard_check(ord("A"))) {
-		x += dsin(look_dir)*spd;
-		y += dcos(look_dir)*spd;
-	}
-
-	if (keyboard_check(ord("D"))) {
-		x -= dsin(look_dir)*spd;
-		y -= dcos(look_dir)*spd;
-	}
-
-	if (keyboard_check(vk_space)) {
-		z += spd;
-	}
-
-	if (keyboard_check(vk_shift)) {
-		z -= spd;
-	}
+	
+	////Rough collision system
+	//for(var I = 0; I<=2;I++)
+	//{
+	//	if world_get_block(floor(x+vel.x+.5),x,z-I) {vel.x = min(vel.x,0); x = min(x,floor(x+1))}
+	//	if world_get_block(x,floor(y+vel.y+.5),z-I) {vel.y = min(vel.y,0); y = min(y,floor(y+1))}
+	//	if world_get_block(x,y,floor(z+vel.z+.5-I)) {vel.z = min(vel.z,0); z = min(z,floor(z+1))}
+	//	if world_get_block(floor(x+vel.x-.5),y,z-I) {vel.x = max(vel.x,0); x = max(x,floor(x-1))}
+	//	if world_get_block(x,floor(y+vel.y-.5),z-I) {vel.y = max(vel.y,0); y = max(y,floor(y-1))}
+	//	if world_get_block(x,y,floor(z+vel.z-.8-I)) {vel.z = max(vel.z,.3); z = max(z,floor(z-1.3))}
+	//}
+	
+	x += vel.x;
+	y += vel.y;
+	z += vel.z;
 
 	if (keyboard_check(vk_control)) {
 		spd = 6;
@@ -280,17 +285,23 @@ raycast = {
 			cz = sz;
 		}
 	
-		// Break block
-		if (_lb) {
-			world_set_block(sx, sy, sz, BLOCK_ID.AIR);
-			audio_play_sound(snd_break_block, 1, false);
+		
+		if (hit) {
+			// Break block
+			if (_lb) {
+				world_set_block(sx, sy, sz, BLOCK_ID.AIR);
+				audio_play_sound(snd_break_block, 1, false);
+			}
+		
+			// Place block
+			if (_rb && (i > 3 - _dz)) {
+				world_set_block(cx, cy, cz, selected_block)
+				audio_play_sound(snd_place_block, 1, false);
+			}	
 		}
 		
-		// Place block
-		if (_rb && hit && (i > 3 - _dz)) {
-			world_set_block(cx, cy, cz, selected_block)
-			audio_play_sound(snd_place_block, 1, false);
-		}	
+		
+		
 	},
 	
 	draw : function() {

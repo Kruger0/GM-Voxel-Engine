@@ -10,11 +10,16 @@ varying vec3 v_normal;
 varying vec4 v_color;
 varying float v_block;
 
+varying vec3 v_world_pos;
+varying vec3 v_cam_pos;
 
 uniform float u_time;
 
 void main() {
-	gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * vec4(in_Position, 1.0);	
+	vec4 object_pos = vec4(in_Position, 1.0);
+	gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * object_pos;	
+	
+	v_world_pos = (gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * object_pos).xyz;
 	
     vec3 normals[6];
 	

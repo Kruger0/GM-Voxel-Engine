@@ -3,8 +3,8 @@
 function chunk_get_block(_chunk_buffer, _x, _y, _z) {
 	
 	// Position out of bounds
-	if ((_x >= CHUNK_XLEN) | (_y >= CHUNK_YLEN) | (_z > CHUNK_ZLEN)) { return 0}
-	if ((_x < 0) | (_y < 0) | (_z < -1)) { return 0 }
+	if ((_x >= CHUNK_XLEN) | (_y >= CHUNK_YLEN) | (_z >= CHUNK_ZLEN)) { return 0}
+	if ((_x < 0) | (_y < 0) | (_z < 0)) { return 0 }
 	
 	// Read the buffer in three dimentions
 	var _pos = (
@@ -24,7 +24,7 @@ function chunk_get_block(_chunk_buffer, _x, _y, _z) {
 function chunk_set_block(_chunk_buffer, _x, _y, _z, _block_id) {
 	
 	// Position out of bounds
-	if ((_x >= CHUNK_XLEN) | (_y >= CHUNK_YLEN) | (_z > CHUNK_ZLEN)) { return 0 }
+	if ((_x >= CHUNK_XLEN) | (_y >= CHUNK_YLEN) | (_z >= CHUNK_ZLEN)) { return 0 }
 	if ((_x < 0) | (_y < 0) | (_z < 0)) { return 0 }
 	
 	// Read the buffer in three dimentions

@@ -1,10 +1,4 @@
 
-display_reset(8, false);
-gpu_set_tex_mip_bias(0)
-gpu_set_tex_mip_filter(tf_linear)
-gpu_set_tex_mip_enable(mip_on)
-//gpu_set_texfilter(false)
-
 function Vector3(x, y, z) constructor {
     self.x = x;
     self.y = y;
